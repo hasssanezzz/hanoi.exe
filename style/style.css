@@ -1,0 +1,19 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.base-plate {
+  @apply bg-sky-500 w-full h-[25px] rounded-br-md border-2 border-black rounded-bl-md flex items-center justify-center text-white font-bold;
+}
+
+.plate {
+  @apply bg-white border border-black rounded-bl-none rounded-br-none ml-auto mr-auto h-[25px] rounded flex items-center justify-center;
+}
+
+.stack {
+  @apply border-t-2 border-black flex items-center justify-center;
+}
+
+.stack span {
+  @apply text-sky-500 font-bold px-2
+}
