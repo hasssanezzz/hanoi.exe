@@ -1,139 +1,105 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style/output.css" />
-    <title>Hanoi.exe by Hassan Ezz</title>
-  </head>
-  <body>
-    <main
-      id="init-window"
-      class="text-center w-full h-screen flex items-center justify-center text-white bg-gradient-to-bl from-gray-700 via-gray-900 to-black absolute top-0 left-0 z-[100]"
-    >
-      <div class="max-w-2xl space-y-10">
-        <div>
-          <h1 class="outline-text text-8xl font-bold mb-7">Hanoi.EXE</h1>
-          <p class="text-2xl mb-5">
-            A simple tower of hanoi visualization tool.
-          </p>
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Hanoi.exe by Hassan Ezz</title>
+</head>
+
+<body>
+  <main id="init-window"
+    class="text-center w-full h-screen flex items-center justify-center text-white bg-gradient-to-bl from-gray-700 via-gray-900 to-black absolute top-0 left-0 z-[100]">
+    <div class="max-w-2xl space-y-10">
+      <div>
+        <h1 class="outline-text text-8xl font-bold mb-7">Hanoi.EXE</h1>
+        <p class="text-2xl mb-5">
+          A simple tower of hanoi visualization tool.
+        </p>
+        <p>
+          🚩 Developed by
+          <a href="https://github.com/hasssanezzz" target="_blank" class="underline text-sky-600">Hassan Ezz</a>
+        </p>
+      </div>
+
+      <div>
+        <form id="main-form">
+          <input id="count" type="number" min="3" max="18" value="6" placeholder="Disc count..."
+            class="w-full outline-none bg-white rounded-2xl px-3 py-2 mt-2 text-black border-t-4 border-l-4 border-sky-500 hover:border-sky-700 transition-alls duration-500 font-bold"
+            required />
+
+          <button
+            class="px-20 py-2 text-sky-500 bg-white font-bold rounded-2xl mt-10 text-center m-auto border-t-4 border-l-4 border-sky-500 hover:border-sky-700 hover:text-sky-700 transition-alls duration-500">
+            Start
+          </button>
+        </form>
+      </div>
+    </div>
+  </main>
+
+  <main id="visual" class="flex items-start h-screen w-full relative z-50">
+    <div id="move-to" class="absolute text-7xl font-bold text-gray-400 top-20 left-10 capitalize"></div>
+
+    <div id="view" class="flex-auto h-full">
+      <div class="grid grid-cols-3 bg-gray-200 h-full w-full gap-8 p-10">
+        <div class="flex flex-col-reverse">
+          <div class="base-plate">A</div>
+        </div>
+        <div class="flex flex-col-reverse">
+          <div class="base-plate">B</div>
+        </div>
+        <div class="flex flex-col-reverse">
+          <div class="base-plate">C</div>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="w-[350px] overflow-auto border-l border-sky-600 h-full max-h-screen flex flex-col items-center p-10 bg-white">
+      <div class="flex-auto w-full">
+        <label for="">Step in milliseconds</label>
+        <input required id="time" type="number" min="3" max="15" value="200" placeholder="milliseconds..."
+          class="mb-5 border w-full outline-none bg-white rounded-2xl px-3 py-2 mt-2 text-black border-t-4 border-l-4 border-sky-500 hover:border-sky-700 transition-alls duration-500" />
+
+        <div class="flex items-center gap-5">
+          <button id="start-button" onclick="start()" type="button"
+            class="px-6 py-2 text-sky-500 border font-bold rounded-2xl flex-auto text-center border-t-4 border-l-4 border-sky-500 hover:border-sky-700 hover:text-sky-700 transition-alls duration-500">
+            Start
+          </button>
+          <button id="reset-button" onclick="reset()" type="button"
+            class="px-6 py-2 text-red-500 border font-bold rounded-2xl flex-auto text-center border-t-4 border-l-4 border-red-500 hover:border-red-700 hover:text-red-700 transition-alls duration-500"
+            style="display: none">
+            Reset
+          </button>
+        </div>
+
+        <div class="text-center my-10 space-y-3"> 
           <p>
             🚩 Developed by
-            <a
-              href="https://github.com/hasssanezzz"
-              target="_blank"
-              class="underline text-sky-600"
-              >Hassan Ezz</a
-            >
+            <a href="https://github.com/hasssanezzz" target="_blank" class="underline text-sky-600">Hassan Ezz</a>
+          </p>
+          <p>
+            👉 Check the
+            <a href="https://github.com/hasssanezzz/hanoi.EXE" target="_blank" class="underline text-sky-600">Source code</a>
           </p>
         </div>
-
-        <div>
-          <form id="main-form">
-            <input
-              id="count"
-              type="number"
-              min="3"
-              max="18"
-              value="6"
-              placeholder="Disc count..."
-              class="w-full outline-none bg-white rounded-2xl px-3 py-2 mt-2 text-black border-t-4 border-l-4 border-sky-500 hover:border-sky-700 transition-alls duration-500 font-bold"
-              required
-            />
-
-            <button
-              class="px-20 py-2 text-sky-500 bg-white font-bold rounded-2xl mt-10 text-center m-auto border-t-4 border-l-4 border-sky-500 hover:border-sky-700 hover:text-sky-700 transition-alls duration-500"
-            >
-              Start
-            </button>
-          </form>
-        </div>
-      </div>
-    </main>
-
-    <main id="visual" class="flex items-start h-screen w-full relative z-50">
-      <div
-        id="move-to"
-        class="absolute text-7xl font-bold text-gray-400 top-20 left-10 capitalize"
-      ></div>
-
-      <div id="view" class="flex-auto h-full">
-        <div class="grid grid-cols-3 bg-gray-200 h-full w-full gap-8 p-10">
-          <div class="flex flex-col-reverse">
-            <div class="base-plate">A</div>
-          </div>
-          <div class="flex flex-col-reverse">
-            <div class="base-plate">B</div>
-          </div>
-          <div class="flex flex-col-reverse">
-            <div class="base-plate">C</div>
-          </div>
-        </div>
       </div>
 
-      <div
-        class="w-[350px] overflow-auto border-l border-sky-600 h-full max-h-screen flex flex-col items-center p-10 bg-white"
-      >
-        <div class="flex-auto w-full">
-          <label for="">Step in milliseconds</label>
-          <input
-            required
-            id="time"
-            type="number"
-            min="3"
-            max="15"
-            value="200"
-            placeholder="milliseconds..."
-            class="mb-5 border w-full outline-none bg-white rounded-2xl px-3 py-2 mt-2 text-black border-t-4 border-l-4 border-sky-500 hover:border-sky-700 transition-alls duration-500"
-          />
-
-          <div class="flex items-center gap-5">
-            <button
-              id="start-button"
-              onclick="start()"
-              type="button"
-              class="px-6 py-2 text-sky-500 border font-bold rounded-2xl flex-auto text-center border-t-4 border-l-4 border-sky-500 hover:border-sky-700 hover:text-sky-700 transition-alls duration-500"
-            >
-              Start
-            </button>
-            <button
-              id="reset-button"
-              onclick="reset()"
-              type="button"
-              class="px-6 py-2 text-red-500 border font-bold rounded-2xl flex-auto text-center border-t-4 border-l-4 border-red-500 hover:border-red-700 hover:text-red-700 transition-alls duration-500"
-              style="display: none"
-            >
-              Reset
-            </button>
-          </div>
-
-          <p class="text-center my-10">
-            🚩 Developed by
-            <a
-              href="https://github.com/hasssanezzz"
-              target="_blank"
-              class="underline text-sky-600"
-              >Hassan Ezz</a
-            >
-          </p>
+      <main class="w-full">
+        <div id="stack"
+          class="text-sm border-4 rounded-md border-black border-t-0 rounded-t-none flex flex-col-reverse">
+          <div class="p-1"></div>
         </div>
 
-        <main class="w-full">
-          <div
-            id="stack"
-            class="text-sm border-4 rounded-md border-black border-t-0 rounded-t-none flex flex-col-reverse"
-          >
-            <div class="p-1"></div>
-          </div>
+        <h2 class="uppercase font-bold text-center mt-3">CALL STACK</h2>
+      </main>
+    </div>
+  </main>
 
-          <h2 class="uppercase font-bold text-center mt-3">CALL STACK</h2>
-        </main>
-      </div>
-    </main>
 
-    
 
-    <script src="./js/index.js"></script>
-  </body>
+  <script type="module" src="./src/main.js"></script>
+</body>
+
 </html>

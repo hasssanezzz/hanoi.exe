@@ -1,5 +1,7 @@
-let stepIndex = 1,
-  DISC_LENGTH = 0,
+import '../style.css'
+import { mapDiscWidth, sleep } from './helpers'
+
+let DISC_LENGTH = 0,
   SLEEP_TIME = 1000,
   started = false
 
@@ -7,14 +9,10 @@ let stepIndex = 1,
 const resetBtn = document.getElementById("reset-button")
 const startBtn = document.getElementById("start-button")
 
-async function sleep() {
-  await new Promise((r) => setTimeout(r, SLEEP_TIME))
-}
-
 const state = {
   a: Array(7)
     .fill(0)
-    .map((e, i) => i + 1)
+    .map((_, i) => i + 1)
     .reverse(),
   b: [],
   c: [],
@@ -32,115 +30,106 @@ const state = {
     document.querySelector("#stack").innerHTML += '<div class="p-1"></div>'
   },
 
-  push(x) {
+  pushToStack(x) {
     this.stack.push(x)
     this.renderStack()
   },
 
-  pop() {
+  popFromStack() {
     this.stack.pop()
     this.renderStack()
   },
 
-  move(key1, key2) {
+  // swap by the smallest disk
+  swapBetween(key1, key2) {
     key1 = key1.toLowerCase()
     key2 = key2.toLowerCase()
 
-    if (this[key1].length === 0 && this[key2].length === 0) {
-      console.log("ERROR")
-      console.log(key1, key2)
-      return
-    }
-
+    // if pipe is empty, push the disk
     if (this[key1].length === 0) {
       this[key1].push(this[key2].pop())
       render()
       return
     }
 
+    // if pipe is empty, push the disk
     if (this[key2].length === 0) {
       this[key2].push(this[key1].pop())
       render()
       return
     }
 
+    // if both pipes are not empty, swap min and max
     if (this[key1][this[key1].length - 1] < this[key2][this[key2].length - 1])
       this[key2].push(this[key1].pop())
     else this[key1].push(this[key2].pop())
 
+    // render to reflect changes
     render()
   },
 }
 
-function mapDiscWidth(X) {
-  const A = 1,
-    B = DISC_LENGTH,
-    C = 20,
-    D = 100
-  return ((X - A) / (B - A)) * (D - C) + C
-}
-
+// reflects state on the DOM
 function render() {
-  const bibes = document.querySelectorAll(".flex-col-reverse")
+  const pipes = document.querySelectorAll(".flex-col-reverse")
 
-  bibes[0].innerHTML = '<div class="base-plate">A</div>'
+  pipes[0].innerHTML = '<div class="base-plate">A</div>'
   state.a.forEach((ele) => {
-    bibes[0].innerHTML += `
-      <div class="plate" style="width: ${mapDiscWidth(ele)}%">${ele}</div>
+    pipes[0].innerHTML += `
+      <div class="plate" style="width: ${mapDiscWidth(ele, DISC_LENGTH)}%">${ele}</div>
     `
   })
 
-  bibes[1].innerHTML = '<div class="base-plate">B</div>'
+  pipes[1].innerHTML = '<div class="base-plate">B</div>'
   state.b.forEach((ele) => {
-    bibes[1].innerHTML += `
-      <div class="plate" style="width: ${mapDiscWidth(ele)}%">${ele}</div>
+    pipes[1].innerHTML += `
+      <div class="plate" style="width: ${mapDiscWidth(ele, DISC_LENGTH)}%">${ele}</div>
     `
   })
 
-  bibes[2].innerHTML = '<div class="base-plate">C</div>'
+  pipes[2].innerHTML = '<div class="base-plate">C</div>'
   state.c.forEach((ele) => {
-    bibes[2].innerHTML += `
-      <div class="plate" style="width: ${mapDiscWidth(ele)}%">${ele}</div>
+    pipes[2].innerHTML += `
+      <div class="plate" style="width: ${mapDiscWidth(ele, DISC_LENGTH)}%">${ele}</div>
     `
   })
 }
 
+// do you love spaghetti ??
 async function compute() {
   async function hanoi(n, a, b, c) {
     if (n == 1) {
-      await sleep()
-      state.move(a, c)
+      await sleep(SLEEP_TIME)
+      state.swapBetween(a, c)
       return
     }
 
-    await sleep()
-    state.push(
-      `hanoi(${
-        n - 1
+    await sleep(SLEEP_TIME)
+    state.pushToStack(
+      `hanoi(${n - 1
       }, ${a.toUpperCase()}, ${c.toUpperCase()}, ${b.toUpperCase()}) - move <span>${a.toUpperCase()}</span> to <span>${b.toUpperCase()}</span>`
     )
     await hanoi(n - 1, a, c, b)
-    await sleep()
-    state.pop()
+    await sleep(SLEEP_TIME)
+    state.popFromStack()
 
-    await sleep()
-    state.push(
-      `hanoi(${
-        n - 1
+    await sleep(SLEEP_TIME)
+    state.pushToStack(
+      `hanoi(${n - 1
       }, ${b.toUpperCase()}, ${a.toUpperCase()}, ${c.toUpperCase()}) - move <span>${b.toUpperCase()}</span> to <span>${c.toUpperCase()}</span>`
     )
-    state.move(a, c)
+    state.swapBetween(a, c)
     await hanoi(n - 1, b, a, c)
-    await sleep()
-    state.pop()
+    await sleep(SLEEP_TIME)
+    state.popFromStack()
   }
 
-  state.push(
+  state.pushToStack(
     `hanoi(${DISC_LENGTH}, A, B, C) - move <span>A</span> to <span>C</span>`
   )
   await hanoi(DISC_LENGTH, "a", "b", "c")
-  await sleep()
-  state.pop()
+  await sleep(SLEEP_TIME)
+  state.popFromStack()
 
   resetBtn.style.display = "block"
   startBtn.style.display = "none"
@@ -148,7 +137,6 @@ async function compute() {
 
 function start() {
   SLEEP_TIME = document.querySelector("input#time").value
-  console.log(DISC_LENGTH)
   if (!started) compute(), (started = true)
 }
 
@@ -188,3 +176,6 @@ function init() {
 
   render()
 }
+
+resetBtn.onclick = reset
+startBtn.onclick = start
